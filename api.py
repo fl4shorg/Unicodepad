@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from text_fancipy import fancy as fancipy_fancy
-import fancytext
 from fontes_custom import apply_custom_fonts
 
 app = Flask(__name__)
@@ -11,30 +10,24 @@ def gerar_fontes():
     if not texto:
         return jsonify({"erro": "Parâmetro 'texto' é obrigatório"}), 400
 
-    resultado = {
-        "original": texto
-    }
+    resultado = {"original": texto}
 
-    # Fontes da text-fancipy
-    fancipy_estilos = [
+    # Fontes do text-fancipy (~60 estilos)
+    estilos = [
         "bubble", "bold", "italic", "outline", "wide", "strike", "slash",
-        "flip", "parenthesis", "small", "square", "mirror", "tiny", "dark"
+        "flip", "parenthesis", "small", "square", "mirror", "tiny", "dark",
+        "circled", "circled_white", "upside_down", "currency", "roman", 
+        "superscript", "subscript", "block", "underline", "slash_through", 
+        "invisible", "diacritical", "zalgo"
     ]
-    for estilo in fancipy_estilos:
+
+    for estilo in estilos:
         try:
-            resultado[f"text_fancipy_{estilo}"] = fancipy_fancy(texto, estilo)
-        except:
+            resultado[f"textfancipy_{estilo}"] = fancipy_fancy(texto, estilo)
+        except Exception:
             pass
 
-    # Fontes do fancytext (via GitHub)
-    try:
-        fancy_variantes = fancytext.fancy_all(texto)
-        for estilo, convertido in fancy_variantes.items():
-            resultado[f"fancytext_{estilo}"] = convertido
-    except:
-        resultado["fancytext_error"] = "Erro ao aplicar fancytext"
-
-    # Fontes manuais (soft aesthetic e mais)
+    # Fontes personalizadas (manuais)
     resultado.update(apply_custom_fonts(texto))
 
     return jsonify(resultado)
