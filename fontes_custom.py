@@ -11,19 +11,29 @@ def soft_aesthetic(text):
     }
     return ''.join(mapa.get(c, c) for c in text)
 
-def tinycaps(text):
-    mapa = { 
-        'a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','f':'ᶠ','g':'ᵍ','h':'ʰ','i':'ᶦ','j':'ʲ','k':'ᵏ','l':'ˡ','m':'ᵐ','n':'ⁿ','o':'ᵒ','p':'ᵖ','q':'ᑫ','r':'ʳ','s':'ˢ','t':'ᵗ','u':'ᵘ','v':'ᵛ','w':'ʷ','x':'ˣ','y':'ʸ','z':'ᶻ',
-        ' ':' '
+def tiny_caps(text):
+    mapa = {
+        'a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','f':'ᶠ','g':'ᵍ','h':'ʰ',
+        'i':'ᶦ','j':'ʲ','k':'ᵏ','l':'ˡ','m':'ᵐ','n':'ⁿ','o':'ᵒ','p':'ᵖ',
+        'q':'ᑫ','r':'ʳ','s':'ˢ','t':'ᵗ','u':'ᵘ','v':'ᵛ','w':'ʷ','x':'ˣ',
+        'y':'ʸ','z':'ᶻ',' ':' '
     }
     return ''.join(mapa.get(c.lower(), c) for c in text)
 
-def boxed(text):
+def boxed_upper(text):
     return ''.join(chr(ord('🄰') + (ord(c) - 65)) if c.isupper() else c for c in text)
+
+def wide_spaced(text):
+    return ' '.join(list(text))
+
+def emoji_style(text):
+    return ''.join(f":{c}:" if c.isalpha() else c for c in text)
 
 def apply_custom_fonts(text):
     return {
         "soft_aesthetic": soft_aesthetic(text),
-        "tiny_caps": tinycaps(text),
-        "boxed_uppercase": boxed(text)
+        "tiny_caps": tiny_caps(text),
+        "boxed_upper": boxed_upper(text.upper()),
+        "wide_spaced": wide_spaced(text),
+        "emoji_style": emoji_style(text.lower())
     }
