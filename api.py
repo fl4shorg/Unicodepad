@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from text_styler import TextStyler
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -17,9 +18,16 @@ def estilizar():
     if not texto:
         return jsonify({"erro": "Texto não fornecido. Use ?texto=seu_texto"}), 400
 
-    estilos = styler.get_available_styles()
-    resposta = {}
+    estilos = [
+        'bold', 'italic', 'bold italic',
+        'monospace', 'double-struck', 'script',
+        'bold script', 'fraktur', 'bold fraktur',
+        'sans', 'bold sans', 'italic sans', 'bold italic sans',
+        'circled', 'circled negative', 'squared', 'squared negative',
+        'upside down', 'mirrored', 'fullwidth'
+    ]
 
+    resposta = {}
     for estilo in estilos:
         try:
             resposta[estilo] = styler.convert(texto, estilo)
@@ -32,4 +40,5 @@ def estilizar():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
