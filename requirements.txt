@@ -1,3 +1,2 @@
 Flask
 text-fancipy
-git+https://github.com/1tayH/noodletext.git@main#egg=fancytext
