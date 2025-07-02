@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: unicode-text-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python api.py
+    plan: free
