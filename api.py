@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from text_styler import TextStyler
+from text_styler.text_styler import TextStyler
 from flask_cors import CORS
 import os
 
@@ -30,7 +30,7 @@ def estilizar():
     resposta = {}
     for estilo in estilos:
         try:
-            resposta[estilo] = styler.convert(texto, estilo)
+            resposta[estilo] = styler.convert(texto, style=estilo)
         except Exception:
             resposta[estilo] = None
 
