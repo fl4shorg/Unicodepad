@@ -1,2 +1,3 @@
-Flask
-text-fancipy
+flask
+unicode-text-styler
+flask-cors
