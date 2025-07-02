@@ -1,36 +1,35 @@
 from flask import Flask, request, jsonify
-from text_fancipy import fancy as fancipy_fancy
-from fontes_custom import apply_custom_fonts
+from text_styler import TextStyler
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/fonte")
-def gerar_fontes():
-    texto = request.args.get("texto", "")
+styler = TextStyler()
+
+@app.route('/')
+def home():
+    return '✨ API Unicode Text Styler Online ✨'
+
+@app.route('/estilizar', methods=['GET'])
+def estilizar():
+    texto = request.args.get('texto')
     if not texto:
-        return jsonify({"erro": "Parâmetro 'texto' é obrigatório"}), 400
+        return jsonify({"erro": "Texto não fornecido. Use ?texto=seu_texto"}), 400
 
-    resultado = {"original": texto}
-
-    # Fontes do text-fancipy (~60 estilos)
-    estilos = [
-        "bubble", "bold", "italic", "outline", "wide", "strike", "slash",
-        "flip", "parenthesis", "small", "square", "mirror", "tiny", "dark",
-        "circled", "circled_white", "upside_down", "currency", "roman", 
-        "superscript", "subscript", "block", "underline", "slash_through", 
-        "invisible", "diacritical", "zalgo"
-    ]
+    estilos = styler.get_available_styles()
+    resposta = {}
 
     for estilo in estilos:
         try:
-            resultado[f"textfancipy_{estilo}"] = fancipy_fancy(texto, estilo)
+            resposta[estilo] = styler.convert(texto, estilo)
         except Exception:
-            pass
+            resposta[estilo] = None
 
-    # Fontes personalizadas (manuais)
-    resultado.update(apply_custom_fonts(texto))
+    return jsonify({
+        "original": texto,
+        "estilos": resposta
+    })
 
-    return jsonify(resultado)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
